@@ -7,6 +7,7 @@ import java.util.List;
 
 import iait.prestamo.entities.Cuota;
 import iait.prestamo.entities.Prestamo;
+import iait.prestamo.enums.SistemaAmortizacion;
 
 /**
  * Fuente <a href="https://ambito-financiero.com/formulas-calcular-prestamo/">ambito-financiero.com</a>
@@ -23,18 +24,20 @@ public class CalculadoraPrestamos {
 	}
 	
 	public static List<Cuota> calcularCuotas(Prestamo prestamo) {
-		
 		final int scale = 100;
-		
+		//
 		BigDecimal tasaMensual = calcularTasaPeriodo(prestamo.getTna(), 12);
 		BigDecimal capitalInicial = prestamo.getCapital();
 		Integer nroCuotas = prestamo.getNroCuotas();
+		SistemaAmortizacion sistema = prestamo.getSistema();
+		//
+		if (sistema != SistemaAmortizacion.FRANCES) {
+			throw new UnsupportedOperationException();
+		}
 		//
 		BigDecimal valorCuota = capitalInicial.multiply(
 				tasaMensual.multiply(BigDecimal.ONE.add(tasaMensual).pow(nroCuotas)).divide(
 				BigDecimal.ONE.add(tasaMensual).pow(nroCuotas).subtract(BigDecimal.ONE), scale, RoundingMode.HALF_EVEN));
-		//
-
 		//
 		List<Cuota> cuotas = new ArrayList<>();
 		BigDecimal capitalAnterior = capitalInicial;
