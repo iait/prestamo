@@ -8,6 +8,11 @@ import java.util.List;
 import iait.prestamo.entities.Cuota;
 import iait.prestamo.entities.Prestamo;
 
+/**
+ * Fuente <a href="https://ambito-financiero.com/formulas-calcular-prestamo/">ambito-financiero.com</a>
+ * 
+ * @author ismael.ait
+ */
 public class CalculadoraPrestamos {
 	
 	private static BigDecimal calcularTasaPeriodo(BigDecimal porcentajeTasaAnual, Integer periodo) {
@@ -19,16 +24,31 @@ public class CalculadoraPrestamos {
 	
 	public static List<Cuota> calcularCuotas(Prestamo prestamo) {
 		
+		final int scale = 100;
+		
 		BigDecimal tasaMensual = calcularTasaPeriodo(prestamo.getTna(), 12);
-		BigDecimal capital = prestamo.getCapital();
+		BigDecimal capitalInicial = prestamo.getCapital();
 		Integer nroCuotas = prestamo.getNroCuotas();
-		BigDecimal valorCuota = capital.multiply(
+		//
+		BigDecimal valorCuota = capitalInicial.multiply(
 				tasaMensual.multiply(BigDecimal.ONE.add(tasaMensual).pow(nroCuotas)).divide(
-				BigDecimal.ONE.add(tasaMensual).pow(nroCuotas).subtract(BigDecimal.ONE), 20, RoundingMode.HALF_EVEN));
+				BigDecimal.ONE.add(tasaMensual).pow(nroCuotas).subtract(BigDecimal.ONE), scale, RoundingMode.HALF_EVEN));
+		//
+
 		//
 		List<Cuota> cuotas = new ArrayList<>();
-		for (int i = 0; i < nroCuotas; i++) {
-			Cuota cuota = new Cuota(i+1, valorCuota);
+		BigDecimal capitalAnterior = capitalInicial;
+		for (int i = 1; i <= nroCuotas; i++) {
+			
+			BigDecimal saldo = valorCuota.multiply(
+					BigDecimal.ONE.subtract(BigDecimal.ONE.divide(BigDecimal.ONE.add(tasaMensual), scale, RoundingMode.HALF_EVEN)
+							.pow(nroCuotas-i))
+					.divide(tasaMensual, scale, RoundingMode.HALF_EVEN));
+			BigDecimal capital = capitalAnterior.subtract(saldo);
+			BigDecimal interes = valorCuota.subtract(capital);
+			capitalAnterior = saldo;
+			
+			Cuota cuota = new Cuota(i, valorCuota, interes, capital, saldo);
 			cuotas.add(cuota);
 		}
 		return cuotas;
