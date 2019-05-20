@@ -62,7 +62,7 @@ public class Cuota {
 	@Override
 	public String toString() {
 		return String.format(
-				"Cuota: %3d, Valor: %7.3f, Interés: %7.3f, Capital: %7.3f, Saldo: %7.3f", 
+				"Cuota: %3d | Valor: %7.3f | Interés: %7.3f | Capital: %7.3f | Saldo: %7.3f", 
 				cuota, valor, interes, capital, saldo);
 	}
 	

@@ -8,14 +8,14 @@ public class Prestamo {
 	
 	private BigDecimal capital;
 	private Integer nroCuotas;
-	private BigDecimal tna;
+	private BigDecimal tasa;
 	private SistemaAmortizacion sistema;
 	
-	public Prestamo(BigDecimal capital, Integer nroCuotas, BigDecimal tna, SistemaAmortizacion sistema) {
+	public Prestamo(BigDecimal capital, Integer nroCuotas, BigDecimal tasa, SistemaAmortizacion sistema) {
 		super();
 		this.capital = capital;
 		this.nroCuotas = nroCuotas;
-		this.tna = tna;
+		this.tasa = tasa;
 		this.sistema = sistema;
 	}
 
@@ -36,11 +36,11 @@ public class Prestamo {
 	}
 
 	public BigDecimal getTna() {
-		return tna;
+		return tasa;
 	}
 
 	public void setTna(BigDecimal tna) {
-		this.tna = tna;
+		this.tasa = tna;
 	}
 
 	public SistemaAmortizacion getSistema() {
@@ -53,8 +53,9 @@ public class Prestamo {
 
 	@Override
 	public String toString() {
-		return "Prestamo [capital=" + capital + ", nroCuotas=" + nroCuotas + ", tna=" + tna + ", sistema=" + sistema
-				+ "]";
+		return String.format(
+				"Prestamo para un capital de $%s en %d cuotas, con el sistema %s y una tasa de %s%%:", 
+				capital, nroCuotas, sistema, tasa);
 	}
 
 }

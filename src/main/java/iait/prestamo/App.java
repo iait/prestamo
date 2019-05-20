@@ -27,16 +27,14 @@ public class App {
 		System.out.println("Ingrese el sistema de amortización:");
 		String sistema = scanner.nextLine();
 		
-		System.out.println("Ingrese la tasa de interés (TNA):");
+		System.out.println("Ingrese la tasa de interés:");
 		String tasaStr = scanner.nextLine();
 		BigDecimal tasa = new BigDecimal(tasaStr);
 
 		Prestamo prestamo = new Prestamo(capital, nroCuotas, tasa, SistemaAmortizacion.FRANCES);
 		List<Cuota> cuotas = CalculadoraPrestamos.calcularCuotas(prestamo);
 		
-		System.out.println(String.format(
-				"Prestamo para un capital de %s en %d cuotas, con el sistema %s y una tasa de %s%%:", 
-				capital, nroCuotas, sistema, tasa));
+		System.out.println(prestamo);
 		cuotas.stream().forEach(c -> System.out.println(c));
 		
 		scanner.close();
