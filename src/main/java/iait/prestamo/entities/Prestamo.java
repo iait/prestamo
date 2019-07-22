@@ -35,7 +35,7 @@ public class Prestamo {
 		this.nroCuotas = nroCuotas;
 	}
 
-	public BigDecimal getTna() {
+	public BigDecimal getTasa() {
 		return tasa;
 	}
 

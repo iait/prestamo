@@ -18,15 +18,16 @@ public class CalculadoraPrestamos {
 	
 	private static BigDecimal calcularTasaPeriodo(BigDecimal porcentajeTasaAnual, Integer periodo) {
 		BigDecimal tasaAnual = porcentajeTasaAnual.divide(BigDecimal.valueOf(100));
-		Double tasaPeriodoDouble = Math.pow(1 + tasaAnual.doubleValue(), 1/periodo.doubleValue()) - 1;
-		BigDecimal tasaPeriodo = BigDecimal.valueOf(tasaPeriodoDouble);
+//		Double tasaPeriodoDouble = Math.pow(1 + tasaAnual.doubleValue(), 1/periodo.doubleValue()) - 1;
+//		BigDecimal tasaPeriodo = BigDecimal.valueOf(tasaPeriodoDouble);
+		BigDecimal tasaPeriodo = tasaAnual.divide(BigDecimal.valueOf(periodo), 100, RoundingMode.HALF_EVEN);
 		return tasaPeriodo;
 	}
 	
 	public static List<Cuota> calcularCuotas(Prestamo prestamo) {
 		final int scale = 100;
 		//
-		BigDecimal tasaMensual = calcularTasaPeriodo(prestamo.getTna(), 12);
+		BigDecimal tasaMensual = calcularTasaPeriodo(prestamo.getTasa(), 12);
 		BigDecimal capitalInicial = prestamo.getCapital();
 		Integer nroCuotas = prestamo.getNroCuotas();
 		SistemaAmortizacion sistema = prestamo.getSistema();
